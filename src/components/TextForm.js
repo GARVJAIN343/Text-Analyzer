@@ -11,6 +11,17 @@ export default function TextForm(props) {
         let newText = text.toLowerCase();
         settext(newText);
     }
+    const HandleCopy=()=>{
+        var text = document.getElementById("myBox");
+        text.select();
+        navigator.clipboard.writeText(text.value);
+    }
+
+    const HandleExtraSpace=()=>{
+        let newText=text.split(/[ ]+/);
+        settext(newText.join(" "));
+
+    }    
     const HandleClearClick=()=>{
         let newText = "";
         settext(newText);
@@ -18,46 +29,25 @@ export default function TextForm(props) {
     const HandleOnChange=(event)=>{
         settext(event.target.value);
     }
-
-    const [mystyle,setMyStyle]=useState({
-        color:'black',
-        backgroundColor: 'white'
-    })
-    const [btntext,setBtnText]=useState("Enable Dark Mode")
-    const toggleStyle=()=>{
-        if(mystyle.color === 'black'){
-            setMyStyle({
-                color: 'white',
-                backgroundColor:'black'
-            })
-            setBtnText("Enable Light Mode")
-        }
-        else{
-            setMyStyle({
-                color: 'black',
-                backgroundColor:'white'
-            })
-            setBtnText("Enable Dark Mode")
-        }
-    }
     return (
         <>
-    <div className='container' style={mystyle}>
+    <div className='container' style={{color:props.mode==='dark'?'white':'black'}} >
         <h1>{props.heading}</h1>
         <div className="mb-3">
-        <textarea className="form-control" value={text} onChange={HandleOnChange} id="myBox" rows="8" style={mystyle}></textarea>
+        <textarea className="form-control" value={text} onChange={HandleOnChange} style={{backgroundColor: props.mode==='dark'?'#273d4a':'white',color:props.mode==='dark'?'white':'black'}} id="myBox" rows="8" ></textarea>
         </div>
         <button className='btn btn-primary mx-1' onClick={HandleUpClick} >Convert to Uppercase</button>
         <button className='btn btn-primary mx-1' onClick={HandleLoClick} >Convert to Lowercase</button>
         <button className='btn btn-primary mx-1' onClick={HandleClearClick} >Clear Text</button>
-        <button className='btn btn-primary mx-1' onClick={toggleStyle}>{btntext}</button>
+        <button className='btn btn-primary mx-1' onClick={HandleCopy}>Copy Text</button>
+        <button className='btn btn-primary mx-1' onClick={HandleExtraSpace}>Remove Extra Space</button>
 
     </div>
-    <div className='container my-3 'style={mystyle}>
+    <div className='container my-3 ' style={{color:props.mode==='dark'?'white':'black'}}>
         <h1>Your Text Summary</h1> 
         <h6>{text.split(" ").length} Words and {text.length} Characters</h6>
         <h2>Preview</h2>
-        <h6>{text}</h6>
+        <h6>{text.length>0?text:"Enter Something In the TextBox Above To Preview It Here"}</h6>
     </div>
     </>
   )
